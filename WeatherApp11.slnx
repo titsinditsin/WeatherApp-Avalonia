@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="Weather.Core/Weather.Core.csproj" Id="e97e21ca-475d-4b73-8ab5-55ae2ea5f468" />
+  <Project Path="WeatherApp11.Android/WeatherApp11.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="WeatherApp11.Browser/WeatherApp11.Browser.csproj" />
+  <Project Path="WeatherApp11.Desktop/WeatherApp11.Desktop.csproj" />
+  <Project Path="WeatherApp11.iOS/WeatherApp11.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="WeatherApp11/WeatherApp11.csproj" />
+</Solution>
