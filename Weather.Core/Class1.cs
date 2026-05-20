@@ -3,43 +3,20 @@ using System.Text.Json.Serialization;
 using System.Net.Http;
 using System.Threading.Tasks;
 
+
 namespace Weather.Core
 {
-    public class JSONTaker
+    
+
+    public class WeatherApiClient
     {
-        
-        public static string GetKeyApi(string FileName)
-        {
-            try
-            {
-                string jsonString = File.ReadAllText(FileName);
-                using JsonDocument doc = JsonDocument.Parse(jsonString);
-                string ApiK = doc.RootElement.GetProperty("OpenWeatherApiKey").GetString();
-                return ApiK;
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public static async Task<WeatherResponse> GetWeatherJSON(string city, string FileName)
-        {
-
-            JSONTaker JSONTaker = new JSONTaker();
-
-            
-            using var client = new HttpClient();
-            string URL = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={GetKeyApi(FileName)}&units=metric";
 
 
-            // Вызываем метод для парсинга
-            return JSONTaker.ParseWeather(await client.GetStringAsync(URL));
-        }
-        public WeatherResponse ParseWeather(string json)
-        {
-            return JsonSerializer.Deserialize<WeatherResponse>(json);
-        }
+        public WeatherApiClient() { }
     }
+
+
+    // Класс для описания блока "main" в JSON 
     public class TempResponse
     {
         [JsonPropertyName("temp")]
@@ -48,17 +25,17 @@ namespace Weather.Core
         [JsonPropertyName("feels_like")]
         public double FeelTemp { get; set; }
 
-
-        [JsonPropertyName("temp_min")]
-        public double MinT { get; set; }
-
-        [JsonPropertyName("temp_max")]
-        public double MaxT { get; set; }
-
-
+        /// <summary>
+        /// минмакс температура, если нужно будет
+        ///[JsonPropertyName("temp_min")]
+        ///public double MinT { get; set; }
+        ///
+        ///[JsonPropertyName("temp_max")]
+        ///public double MaxT { get; set; }
+        /// </summary>
     }
 
-
+    // Класс для описания погоды 
     public class WeatherCondition
     {
 
@@ -74,6 +51,9 @@ namespace Weather.Core
         [JsonPropertyName("icon")]
         public string Icon { get; set; }
     }
+
+
+    // Класс для всего ответа от API
     public class WeatherResponse
     {
         // Связь с блоком температур
@@ -81,13 +61,19 @@ namespace Weather.Core
         public TempResponse MainData { get; set; }
 
         // Связь со списком описаний погоды
-        // Используем List, потому что в JSON стоят квадратные скобки [ ]
         [JsonPropertyName("weather")]
         public List<WeatherCondition> Weather { get; set; }
+    }
 
-        [JsonPropertyName("name")]
-        public string CityName { get; set; }
+    // Класс для результата, который мы будем возвращать из метода GetWeatherJSON
+    public class WeatherResult
+    {
+        public bool IsSuccess { get; set; }
 
-        
+        // Текст ошибки (если IsSuccess == false)
+        public string ErrorMessage { get; set; }
+
+        // Сами данные (если IsSuccess == true)
+        public WeatherResponse Data { get; set; }
     }
 }

@@ -1,34 +1,55 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:WeatherApp11.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="WeatherApp11.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
+    <Grid>
+        <Border>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                    <GradientStop Color="#1A237E" Offset="0.0" />
+                    <GradientStop Color="#0288D1" Offset="1.0" />
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
 
+        <StackPanel Margin="20" VerticalAlignment="Center" Spacing="15">
 
-    <StackPanel Margin="20" Spacing="10" VerticalAlignment="Center">
-        <TextBlock Text="Прогноз погоды"
-                   FontSize="24"
+            <TextBlock Text="МОСКВА"
+                       HorizontalAlignment="Center"
+                       FontSize="20"
+                       FontWeight="SemiBold"
+                       Foreground="White"
+                       Opacity="0.8"/>
+
+            <TextBlock Text="{Binding WeatherDisplay}"
+                   TextWrapping="Wrap"
+                   TextAlignment="Center"
                    HorizontalAlignment="Center"
-                   FontWeight="Bold"/>
+                   FontSize="48"
+                   FontWeight="Bold"
+                   Foreground="White"/>
+            <TextBlock Text="{Binding TempDisplay}"
+                       HorizontalAlignment="Center"
+                       FontSize="64"
+                       FontWeight="Bold"    
+                        Foreground="White"/>
 
-        <Button Content="Узнать прогноз"
-                Command="{Binding GetWeatherCommand}"
-                HorizontalAlignment="Center"
-                Padding="10,5"/>
+            <Button Command="{Binding GetWeatherCommand}"
+                    Content="Обновить"
+                    HorizontalAlignment="Center"
+                    Padding="40,10"
+                    Background="#33FFFFFF"
+                    Foreground="White"
+                    CornerRadius="15">
+                <Button.Styles>
+                    <Style Selector="Button:pointerover /template/ ContentPresenter">
+                        <Setter Property="Background" Value="#55FFFFFF"/>
+                        <Setter Property="Foreground" Value="White"/>
+                    </Style>
+                </Button.Styles>
+            </Button>
 
-    <TextBlock Text="{Binding Prikolambus}"
-               HorizontalAlignment="Center"
-           TextWrapping="Wrap"/>
-</StackPanel>
-
-
+        </StackPanel>
+    </Grid>
 </UserControl>
-
