@@ -80,4 +80,7 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </AvaloniaResource>
   </ItemGroup>
+	<ItemGroup>
+		<AvaloniaResource Include="Assets\WeathIcons\*.png"/>
+	</ItemGroup>
 </Project>

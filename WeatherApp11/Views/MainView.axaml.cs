@@ -1,4 +1,7 @@
+using System;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 
 namespace WeatherApp11.Views
 {
@@ -8,6 +11,5 @@ namespace WeatherApp11.Views
         {
             InitializeComponent();
         }
-        
     }
 }

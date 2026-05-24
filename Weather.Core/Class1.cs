@@ -1,22 +1,8 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Net.Http;
-using System.Threading.Tasks;
-
+﻿using System.Text.Json.Serialization;
 
 namespace Weather.Core
 {
-    
-
-    public class WeatherApiClient
-    {
-
-
-        public WeatherApiClient() { }
-    }
-
-
-    // Класс для описания блока "main" в JSON 
+    // Соответствует блоку "main" в JSON-ответе OWM
     public class TempResponse
     {
         [JsonPropertyName("temp")]
@@ -24,56 +10,57 @@ namespace Weather.Core
 
         [JsonPropertyName("feels_like")]
         public double FeelTemp { get; set; }
-
-        /// <summary>
-        /// минмакс температура, если нужно будет
-        ///[JsonPropertyName("temp_min")]
-        ///public double MinT { get; set; }
-        ///
-        ///[JsonPropertyName("temp_max")]
-        ///public double MaxT { get; set; }
-        /// </summary>
     }
 
-    // Класс для описания погоды 
+    // Соответствует элементу массива "weather" — описывает тип погоды и иконку
     public class WeatherCondition
     {
-
-        [JsonPropertyName("id")]
-        public int Id { get; set; }
-
         [JsonPropertyName("main")]
         public string MainWeather { get; set; }
 
+        // Текстовое описание на языке, заданном в запросе (lang=ru)
         [JsonPropertyName("description")]
         public string Description { get; set; }
 
+        // Код иконки от OWM, например "01d" (ясно, день) или "10n" (дождь, ночь)
         [JsonPropertyName("icon")]
         public string Icon { get; set; }
+
+        // Преобразует код иконки OWM в путь к локальному ресурсу Avalonia.
+        // Если код неизвестен — падбэк на "03d" (облачно)
+        public static string GetIconPath(string owmIcon)
+        {
+            var validCodes = new HashSet<string>
+            {
+                "01d","01n","02d","02n","03d","03n","04d","04n",
+                "09d","09n","10d","10n","11d","11n","13d","13n","50d","50n"
+            };
+
+            string code = validCodes.Contains(owmIcon) ? owmIcon : "03d";
+            return $"avares://WeatherApp11/Assets/WeathIcons/{code}.png";
+        }
     }
 
-
-    // Класс для всего ответа от API
+    // Корневой объект JSON-ответа от OWM
     public class WeatherResponse
     {
-        // Связь с блоком температур
         [JsonPropertyName("main")]
         public TempResponse MainData { get; set; }
 
-        // Связь со списком описаний погоды
+        // Массив погодных условий — обычно содержит один элемент
         [JsonPropertyName("weather")]
         public List<WeatherCondition> Weather { get; set; }
     }
 
-    // Класс для результата, который мы будем возвращать из метода GetWeatherJSON
+    // Обёртка над результатом запроса — вместо исключений используем явный IsSuccess
     public class WeatherResult
     {
         public bool IsSuccess { get; set; }
 
-        // Текст ошибки (если IsSuccess == false)
+        // Заполняется только если IsSuccess == false
         public string ErrorMessage { get; set; }
 
-        // Сами данные (если IsSuccess == true)
+        // Заполняется только если IsSuccess == true
         public WeatherResponse Data { get; set; }
     }
 }

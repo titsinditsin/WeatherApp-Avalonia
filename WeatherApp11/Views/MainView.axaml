@@ -3,53 +3,87 @@
              xmlns:vm="using:WeatherApp11.ViewModels"
              x:Class="WeatherApp11.Views.MainView"
              x:DataType="vm:MainViewModel">
-    <Grid>
-        <Border>
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
-                    <GradientStop Color="#1A237E" Offset="0.0" />
-                    <GradientStop Color="#0288D1" Offset="1.0" />
-                </LinearGradientBrush>
-            </Border.Background>
+
+    <UserControl.Styles>
+        <Style Selector="Button.update">
+            <Setter Property="Background" Value="#1A1A1A"/>
+            <Setter Property="Foreground" Value="#F5F0E8"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="0,16"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+        <Style Selector="Button.update:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#333333"/>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Background="#F5F0E8">
+        <Border Width="340"
+                CornerRadius="4"
+                Padding="32,36"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+            <StackPanel Spacing="0">
+
+                <!-- Верхняя строка: город -->
+                <TextBlock Text="МОСКВА"
+                           FontSize="11"
+                           Foreground="#999999"
+                           LetterSpacing="3"
+                           Margin="0,0,0,40"/>
+
+                <!-- Температура + иконка -->
+                <Grid Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding TempDisplay}"
+                               FontSize="100"
+                               FontWeight="Bold"
+                               Foreground="#1A1A1A"
+                               LineHeight="100"
+                               VerticalAlignment="Bottom"/>
+
+                    <Image Grid.Column="1"
+                           Source="{Binding WeatherIcon}"
+                           Width="52"
+                           Height="52"
+                           VerticalAlignment="Bottom"
+                           Margin="0,0,0,12"/>
+                </Grid>
+
+                <!-- Описание -->
+                <TextBlock Text="{Binding WeatherDisplay}"
+                           FontSize="13"
+                           Foreground="#999999"
+                           LetterSpacing="1"
+                           Margin="0,0,0,4"/>
+
+                <!-- Ощущается как -->
+                <TextBlock Text="{Binding FeelsLikeDisplay}"
+                           FontSize="12"
+                           Foreground="#BBBBBB"
+                           Margin="0,0,0,36"/>
+
+                <!-- Разделитель -->
+                <Border Height="1"
+                        Background="#D8D2C8"
+                        Margin="0,0,0,28"/>
+
+                <!-- Кнопка -->
+                <Button Classes="update"
+                        Command="{Binding GetWeatherCommand}"
+                        Content="ОБНОВИТЬ"
+                        HorizontalAlignment="Stretch"/>
+
+            </StackPanel>
         </Border>
-
-        <StackPanel Margin="20" VerticalAlignment="Center" Spacing="15">
-
-            <TextBlock Text="МОСКВА"
-                       HorizontalAlignment="Center"
-                       FontSize="20"
-                       FontWeight="SemiBold"
-                       Foreground="White"
-                       Opacity="0.8"/>
-
-            <TextBlock Text="{Binding WeatherDisplay}"
-                   TextWrapping="Wrap"
-                   TextAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="48"
-                   FontWeight="Bold"
-                   Foreground="White"/>
-            <TextBlock Text="{Binding TempDisplay}"
-                       HorizontalAlignment="Center"
-                       FontSize="64"
-                       FontWeight="Bold"    
-                        Foreground="White"/>
-
-            <Button Command="{Binding GetWeatherCommand}"
-                    Content="Обновить"
-                    HorizontalAlignment="Center"
-                    Padding="40,10"
-                    Background="#33FFFFFF"
-                    Foreground="White"
-                    CornerRadius="15">
-                <Button.Styles>
-                    <Style Selector="Button:pointerover /template/ ContentPresenter">
-                        <Setter Property="Background" Value="#55FFFFFF"/>
-                        <Setter Property="Foreground" Value="White"/>
-                    </Style>
-                </Button.Styles>
-            </Button>
-
-        </StackPanel>
     </Grid>
+
 </UserControl>
